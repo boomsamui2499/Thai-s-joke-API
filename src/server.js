@@ -12,11 +12,9 @@ app.use(express.urlencoded({extended: false}));
 app.use(cors());
 
 const routeLogin = require('./routes/login');
-const routeUser = require('./routes/user');
 const routeJoke = require('./routes/joke');
 
 app.use('/api/login', routeLogin);
-app.use('/api/user',isAuth, routeUser);
 app.use('/api/joke',isAuth, routeJoke);
 
 

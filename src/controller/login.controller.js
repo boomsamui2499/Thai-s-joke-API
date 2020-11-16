@@ -1,7 +1,5 @@
 const moment = require('moment-timezone');
 const Login = require('../models/login.model');
-const Usertemplate = require('../template/usertemplate');
-const { userValidation,userupdateValidation } = require('../validate/uservalidate');
 
 
 
