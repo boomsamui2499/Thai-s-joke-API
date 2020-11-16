@@ -18,30 +18,62 @@ Joke.select = async (data, result) => {
 };
 
 
-Joke.selectLike = async (data, result) => {
-    let sql = 'select * from joke where joke.like = 1 ';
-    if(data.id){
-        sql+=` and  joke_id=${data.id}`;
-    }
-    const res = await db.query(sql);
-    if (res.length == 0) {
-        result({ status: false, ...res }, null);
-        return;
-    }
-    result(null, {...res});
-};
 
-Joke.selectDislike = async (data, result) => {
-    let sql = 'select * from joke where dislike = 1';
-    if(data.id){
-        sql+=` and  joke_id = ${data.id}`;
-    }
+
+Joke.selectLike = async (data, result) => {
+    let sum = 0;
+    let sql = `select joke.like from joke where joke_id  = ${data.id}`;
+    console.log(sql);
     const res = await db.query(sql);
     if (res.length == 0) {
         result({ status: false, ...res }, null);
         return;
     }
-    result(null, {...res});
+    const DL = {
+        sumlike: res[0].like,
+    }
+    if(data.like>0){
+        sum = DL.sumlike+1
+    }else{
+        sum = DL.sumlike-1
+    }
+    console.log(sum);
+    await db.query('update joke set joke.like=? where joke_id =?', [sum, data.id])
+        .then(() => {
+            result(null, { status: true, message: 'like success' });
+        }).catch(error => {
+            result({ status: false, message: 'like fail' }, null);
+        });
+
+
+
+};
+Joke.selectDislike = async (data, result) => {
+    let sum = 0;
+    let sql = `select dislike from joke where joke_id  = ${data.id}`;
+    const res = await db.query(sql);
+    if (res.length == 0) {
+        result({ status: false, ...res }, null);
+        return;
+    }
+    const DL = {
+        sumdilike: res[0].dislike,
+    }
+    if(data.dislike>0){
+        sum = DL.sumdilike+1
+    }else{
+        sum = DL.sumdilike-1
+    }
+    console.log(sum);
+    await db.query('update joke set dislike=? where joke_id =?', [sum, data.id])
+        .then(() => {
+            result(null, { status: true, message: 'dislike success' });
+        }).catch(error => {
+            result({ status: false, message: 'update fail' }, null);
+        });
+
+
+
 };
 
 
