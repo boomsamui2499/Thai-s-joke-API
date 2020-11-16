@@ -15,13 +15,13 @@ exports.select = async (req, res) => {
 };
 
 exports.selectLike = async (req, res) => {
-    Joke.selectLike(req.query, (err, data) => {
+    Joke.selectLike(req.body, (err, data) => {
         if (err) res.status(500).send({ message: err.message || 'can\'t get  select like' }); else res.send(data);
     });
 
 };
 exports.selectDislike = async (req, res) => {
-    Joke.selectDislike(req.query, (err, data) => {
+    Joke.selectDislike(req.body, (err, data) => {
         if (err) res.status(500).send({ message: err.message || 'can\'t get select Dislike' }); else res.send(data);
     });
 
